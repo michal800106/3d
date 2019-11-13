@@ -19,31 +19,39 @@ long_cut_depth = body_depth;
 h_cut_size = [body_width+20, 7, 7];
 h_cut_pos = [0, body_depth - 40, wall_thickness];
 
-v_cut_size = [7, body_depth + 3, 7];
+v_cut_size = [7, body_depth + 13, 7];
 v_cut_pos = [0, 0, wall_thickness];
 
 sensor_cut_size = [11.1, 7, wall_thickness + 0.1];
 sensor_cut_pos = [0, body_depth - 64, body_height - wall_thickness];
 
 suv_cut_size = [wall_thickness + 0.2, body_depth - 3, 1.7];
-suv_cut_pos = [-(body_width - wall_thickness)/2, body_depth - 58.3, wall_thickness];
+suv_cut_pos = [-(body_width - wall_thickness)/2, body_depth - 48.3, wall_thickness];
 
 plate_pos = [0, body_depth - 49, 8];
 
 holes = [
-     [2, 15, [10, body_depth - 79.2, -5]],
-     [2, 15, [10, body_depth - 65.4, -5]],
-     [3, 15, [11.4, body_depth - 54.4, -5]],
+     [2, 10, [10, body_depth - 79.2, -5]],
+     [2, 10, [10, body_depth - 65.4, -5]],
+     [3, 10, [11.4, body_depth - 54.4, -5]],
 ];
 
 mount_plate_size = [12, 40, wall_thickness];
 mount_plate_pos = [10, body_depth - 64, -1];
 
-cabel_plate_size = [body_width, 40, wall_thickness];
-cabel_plate_pos = [0, plate_pos.y + cabel_plate_size.y/2, body_height - wall_thickness];
+cabel_plate_size = [20, body_width, 2.5];
+cabel_plate_pos = [
+    cabel_plate_size.x/2,
+    sensor_cut_pos.y + (sensor_cut_size.y + cabel_plate_size.y)/2 + 4,
+    body_height - cabel_plate_size.z
+];
 
 cabel_ring_size = [3.5, 5, 2, 10, 6];
-cabel_ring_pos = [0, plate_pos.y + cabel_plate_size.y, body_height - wall_thickness/2 + cabel_ring_size[4]];
+cabel_ring_pos = [
+    cabel_plate_size.x - cabel_ring_size.z,
+    cabel_plate_pos.y - (cabel_ring_size.y - cabel_plate_size.y)/2,
+    body_height - cabel_plate_size.z/2 + cabel_ring_size[4]
+    ];
 
 cabel_cut_size = 4.5;
 
@@ -53,12 +61,14 @@ module cut(cut_size) {
 };
 
 module body() {
-     linear_extrude(height=body_height)
-          square([body_width, body_depth], center=true);
-
-     translate(mount_plate_pos)
-          linear_extrude(height=mount_plate_size.z)
-          square([mount_plate_size.x, mount_plate_size.y], center=true);
+    linear_extrude(height=body_height)
+        square([body_width, body_depth], center=true);
+    translate([0, body_depth/2+2.5, 0])
+    linear_extrude(height=body_height)
+        square([body_width, 5], center=true);
+    translate(mount_plate_pos)
+        linear_extrude(height=mount_plate_size.z)
+        square([mount_plate_size.x, mount_plate_size.y], center=true);
 
 };
 
@@ -86,12 +96,13 @@ module cabel_ring() {
 };
 
 module cabel() {
-     translate(cabel_plate_pos)
+    translate(cabel_plate_pos)
           linear_extrude(height=cabel_plate_size.z)
           square([cabel_plate_size.x, cabel_plate_size.y], center=true);
 
-     translate(cabel_ring_pos)
-     cabel_ring();
+    translate(cabel_ring_pos)
+    rotate([-10, 0, 90])
+    cabel_ring();
 }
 
 module holes() {
@@ -127,7 +138,7 @@ module plate() {
           translate([8.3, 1, 0])
                circle(r=1.5, center=true);
      };
-     linear_extrude(height=6)
+     linear_extrude(height=4)
           difference() {
           union() {
                translate([-8.3, 1, 0])

@@ -1,7 +1,7 @@
 $fn = 75;
 
-female_width = 18;
-female_depth = 15;
+female_width = 20;
+female_depth = 20;
 female_height = 38.5;
 
 cut_width = 3.5;
@@ -11,15 +11,15 @@ cut_leaning = -7.6;
 cut_stop_depth = 5.5;
 
 cut_begin = 15;
-distance_between_cuts = 4.2;
+distance_between_cuts = 9;
 
-male_width = 13.5;
-male_depth1 = 9.5;
-male_depth2 = 5;
+male_width = 14;
+male_depth1 = 14;
+male_depth2 = 14;
 
-male_height = 12;
+male_height = 15;
 
-spring_hole_d = 8;
+spring_hole_d = 10;
 spring_hole_height = 28;
 
 line_hole_d = 5;
