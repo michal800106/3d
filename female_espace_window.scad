@@ -1,30 +1,31 @@
 $fn = 75;
 
-female_width = 20;
-female_depth = 20;
+female_width = 18;
+female_depth = 15;
 female_height = 38.5;
 
 cut_width = 3.5;
 cut_depth = 2;
-cut_height = 1.5;
+cut_height = 2;
 cut_leaning = -7.6;
 cut_stop_depth = 5.5;
 
 cut_begin = 15;
-distance_between_cuts = 9;
+distance_between_cuts = 5;
 
-male_width = 14;
-male_depth1 = 14;
-male_depth2 = 14;
+male_width = 13.5;
+male_depth1 = 9.5;
+male_depth2 = 5;
 
-male_height = 15;
+male_height = 12;
 
-spring_hole_d = 10;
+spring_hole_d = 8;
 spring_hole_height = 28;
 
 line_hole_d = 5;
 
-
+translate([0, 0, female_depth/2])
+rotate([-90, 0, 0])
 difference() {
     base();
     union() {
@@ -34,6 +35,9 @@ difference() {
         line_hole();
     };
 };
+rotate([0, 0, 90])
+linear_extrude(height=0.5)
+square([female_height*2, female_width*2], center=true);
 
 module line_hole() {
     cylinder(r1=line_hole_d/2, r2=line_hole_d/2, h=female_height, center=true);
