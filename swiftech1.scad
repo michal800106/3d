@@ -132,22 +132,22 @@ module body() {
         central_size.z - inside_size.z
     ])
     mounts();
-    difference() {
-        translate([0, 0, central_size.z - 0.65])
-        cyl(mount_length+10, 0.65);
-        translate([
-            0,
-            0,
-            central_size.z - inside_size.z
-        ])
-        mounts2();
-    };
+//    difference() {
+//        #translate([0, 0, central_size.z - 0.65])
+//        cyl(mount_length+10, 0.65);
+//        translate([
+//            0,
+//            0,
+//            central_size.z - inside_size.z
+//        ])
+//        mounts2();
+//    };
 };
 
 difference() {
     body();
     box(inside_small_size);
     box(inside_size);
-    nut_head_holes();
-    nut_thread_holes();
+    #nut_head_holes();
+    #nut_thread_holes();
 }
