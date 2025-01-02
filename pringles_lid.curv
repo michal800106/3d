@@ -1,0 +1,31 @@
+let
+  h = 6;
+  h2 = 1;
+  d1 = 73;
+  d2 = 71;
+
+  d3 = 78;
+  d4 = 76; 
+
+  big = circle d1;
+  small = circle d2;
+
+  body = difference [
+    big,
+    small 
+  ] >> extrude h;
+
+  big2 = circle d3;
+  small2 = circle d4;
+
+  body2 = difference [
+    big2,
+    small2 
+  ] >> extrude h;
+
+in
+  union [
+    body,
+    body2,
+    circle d3 >> extrude h2 >> move [0, 0, -(h - h2)/2]
+  ]

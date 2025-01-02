@@ -15,7 +15,7 @@ pin_top2_h=pin_h-14;
 
 p_pos_h=7;
 
-dis = 4.2;
+dis = 4.4;
 
 pins = [
   [-1, .5, 0],
@@ -54,7 +54,7 @@ module p() {
   polygon(
     [
     [0, 0],
-    [0, 0.5],
+    [0, 0.3],
     [2, 0]
     ]
   );
@@ -113,12 +113,12 @@ module pin_bottom_body_cut() {
     linear_extrude(height=9)
     polygon(
     [
-    [-1.75, -1.75],
-    [1.75, -1.75],
-    [1.75, 1.75/2],
-    [1.75/2, 1.75],
-    [-1.75/2, 1.75],
-    [-1.75, 1.75/2]
+    [-1.7, -1.7],
+    [1.7, -1.7],
+    [1.7, 1.7/2],
+    [1.7/2, 1.7],
+    [-1.7/2, 1.7],
+    [-1.7, 1.7/2]
     ]
     );
 }
@@ -126,7 +126,7 @@ module pin_bottom_body_cut() {
 module pin_bottom_body_rec() {
     linear_extrude(height=9)
     square(
-    [3.5, 3.5], center=true
+    [3.4, 3.4], center=true
     );
 }
 
@@ -144,9 +144,9 @@ module body() {
 
 
 module clip() {
-   translate(
+   #translate(
     [
-    0,
+    -1.2,
     0,
     9
     ]
@@ -154,7 +154,7 @@ module clip() {
    rotate(
     [
     -90,
-    0,
+    -8,
     0
     ]
     )
@@ -167,10 +167,28 @@ module clip() {
     )
    linear_extrude(height=5)
    union() {
-       square([2, 15], center=true);
        translate(
         [
-        0, 5
+        0, 2
+        ]
+       )
+       polygon(
+       [
+        [-1, 0],
+        [1, 0],
+        [1, -1],
+        [-1, -5]
+       ] 
+       );
+       translate(
+        [
+        0, 1.8
+        ]
+       )
+       square([2, 12], center=true);
+       translate(
+        [
+        0, 6.5
         ]
        )
        polygon(
@@ -178,8 +196,8 @@ module clip() {
         [-1, 0],
         [1, 0],
         [1, 1],
-        [2, 1],
-        [0, 4],
+        [2.5, 1],
+        [0, 3],
         [-1, 3]
        ] 
        );
@@ -206,18 +224,23 @@ module flex() {
    translate([
     0,
     0,
-    -0.5
+    -1
     ]) {
    rotate_extrude(angle=90)
-   translate([2, 0])
-   square([1, 1]);
+   translate([4, -3])
+   square([1.5, 6]);
    
-   linear_extrude(height=1)
+   translate([
+    0,
+    0,
+    -3
+    ])
+   linear_extrude(height=6)
    translate([
    -5,
-   2 
+    4
    ])
-   square([5, 1]);
+   square([5, 2]);
    }
 }
 
@@ -226,7 +249,7 @@ module both_flex() {
     [
     0,
     0,
-    3
+    4
     ]
     )
    flex();
@@ -234,7 +257,7 @@ module both_flex() {
     [
     0,
     0,
-    -3
+    -2
     ]
     )
    flex();

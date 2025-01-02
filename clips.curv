@@ -1,0 +1,11 @@
+let
+  outside_d=8;
+  thicknes=1.5;
+  inside_d=2;
+  angle_bend=325;
+  weird_w=3; 
+in
+  box [weird_w, (outside_d-inside_d)/2, thicknes]
+   >> bend {d: inside_d, angle: angle_bend*deg}
+
+

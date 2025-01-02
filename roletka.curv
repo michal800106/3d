@@ -1,0 +1,166 @@
+let
+  base_r = 26;
+  base_d = base_r*2;
+  rect_a = base_r*2+1;
+  base_w = 8.5;
+  cut_d = 17;
+  cut_w = 7.5;
+
+  cut_line_w = cut_w;
+  cut_line_d = 13;
+  cut_line_a = 28;
+
+  small_cut_line_w = cut_w;
+  small_cut_line_d = 6;
+  small_cut_line_a = 15;
+
+  cut_mount_d = 3;
+  mount_d = 6;
+
+  pin_d = 4.6;
+  pin_w = 8.5;
+
+  small_pin_d = 1.2;
+  small_pin_a = 5.6;
+  small_pin_step = 360*deg/6;
+
+  base_mount_a = 3;
+  base_mount_d = 57;
+  base_mount_w = 15;
+
+  clutch_rect1_a = 1.5;
+  clutch_rect1_d = 15;
+  clutch_rect_w = 25;
+
+  clutch_rect2_a = 5;
+  clutch_rect2_d = 1.4;
+
+  clutch_base_a = 10;
+  clutch_base_d = 10;
+  clutch_base_w = 6;
+
+  lock_d = 4;
+  lock_a = 8;
+  lock_w = 8;
+  
+  lock_pin_d = 1;
+  lock_pin_a = 8;
+
+  base = difference [
+    circle base_d,
+    rect [rect_a, rect_a]
+      >> move [(-rect_a/2), 0]
+  ] >> extrude base_w;
+
+  cut = circle cut_d
+        >> extrude cut_w
+	>> move [cut_d/2, 0, base_w-cut_w];
+
+  cut_line = polygon [[cut_line_d/2+3, -cut_line_a/2], [cut_line_d/2+0.7, cut_line_a/2], [-cut_line_d/2, cut_line_a/2], [-cut_line_d/2-1, -cut_line_a/2]]
+        >> rotate (18*deg)
+	>> extrude cut_line_w
+	>> move [cut_line_d/2+7.1, -cut_line_a/2+2, base_w-cut_line_w];
+
+  small_cut_line = rect [small_cut_line_d, small_cut_line_a]
+        >> rotate (30*deg)
+	>> extrude small_cut_line_w
+	>> move [small_cut_line_d/2+4.7, -small_cut_line_a/2-2, base_w-small_cut_line_w];
+
+  small_arc = circle 50
+        >> extrude small_cut_line_w
+	>> move [-16.740, -20.0-2, base_w-small_cut_line_w-0.5];
+
+  small_pin = rect [small_pin_a, small_pin_d]
+        >> extrude pin_w;
+
+  pin = union [
+          cylinder {d: pin_d, h: pin_w},
+	  small_pin >> rotate (1*small_pin_step),
+	  small_pin >> rotate (2*small_pin_step),
+	  small_pin >> rotate (3*small_pin_step)
+	]
+        >> move [cut_d/2, 0, 0];
+
+  cut_mount = cylinder {d: cut_mount_d, h: pin_w+2};
+  mount = cylinder {d: mount_d, h: pin_w};
+
+  mount_hor = cylinder {d: 10, h: 30}
+         >> rotate {angle: 90*deg, axis: [0, 1, 0]}
+         >> move [18, 28.6-13.5, (pin_w-cut_w)/2-(clutch_base_w+(pin_w-cut_w))];
+
+  mount_hor_small1 = cylinder {d: 3, h: 10}
+         >> rotate {angle: 90*deg, axis: [0, 1, 0]}
+         >> move [0, 28.6-13.5, (pin_w-cut_w)/2-(clutch_base_w+(pin_w-cut_w))-4.1+5];
+
+  mount_hor_small2 = cylinder {d: 3, h: 10}
+         >> rotate {angle: 90*deg, axis: [0, 1, 0]}
+         >> move [0, -28.8+12, (pin_w-cut_w)/2-(clutch_base_w+(pin_w-cut_w))-4.1+4];
+
+  clutch = union [
+             rect [clutch_rect1_a, clutch_rect1_d],
+             rect [clutch_rect2_a, clutch_rect2_d] >> move [clutch_rect2_a/2-clutch_rect1_a/2, clutch_rect1_d/2-clutch_rect2_d/2]
+         ]    
+         >> extrude clutch_rect_w
+         >> rotate {angle: 90*deg, axis: [0, 1, 0]}
+         >> rotate {angle: 90*deg, axis: [1, 0, 0]};
+
+  clutch_base = rect [clutch_base_d, clutch_base_a]
+         >> extrude (clutch_base_w)
+         >> move [clutch_base_d/2+base_mount_a, -2, (pin_w-cut_w)/2-(clutch_base_w+(pin_w-cut_w))]
+         ;
+        
+  base_mount = rect [base_mount_a, base_mount_d]
+         >> extrude base_mount_w
+	 >> move [base_mount_a/2, 0, -(base_mount_w-pin_w)/2];
+
+  lock_pin = cylinder {d: lock_pin_d, h: lock_d}
+        >> rotate {angle: 90*deg, axis: [1, 0, 0]};
+  lock = union [
+           rect [lock_a, lock_d]
+             >> extrude lock_w,
+           lock_pin
+             >> move [-lock_a/2+4, 0, -lock_w/2-0.2]
+         ]
+	 >> move [lock_a/2, 0, -(lock_w-pin_w)/2];
+in
+  union [
+    pin,
+    intersection [
+      small_cut_line,
+      small_arc
+    ]
+    ,
+  difference [
+      union[
+        base,
+	base_mount,
+        lock
+          >> move [base_mount_a, -lock_d+1.25+29.25-7.4-18.1, -7],
+        clutch_base
+          >> move [4, -7.2, -0],
+	mount
+	  >> move [7, 2 + 25],
+	mount
+	  >> move [7, 2 - 27]
+      ],
+      union [
+        cut,
+        cut_line,
+        small_cut_line,
+        mount_hor,
+        mount_hor_small1,
+        mount_hor_small2,
+	cut_mount
+	  >> move [7, 2 + 25],
+	cut_mount
+	  >> move [7, 2 - 27],
+        clutch
+          >> move [clutch_rect_w/2+base_mount_a, 0, (pin_w-cut_w)/2-(clutch_rect_w/2)]
+          >> move [0, 29.25-7.4-34.6, -4.6+4.8],
+        clutch
+          >> reflect Y_axis
+          >> move [clutch_rect_w/2+base_mount_a, 0, (pin_w-cut_w)/2-clutch_rect_w/2]
+          >> move [0, 29.25-7.4, -4.6+11.0]
+      ]
+    ]
+  ]// >> reflect Z_axis

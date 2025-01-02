@@ -1,0 +1,5 @@
+let
+  boxik = polygon[[-3, 1], [1, 1], [2, -1], [-2, -1]] >> extrude 0.1;
+in
+  boxik
+   >> move [0, 40, 0]

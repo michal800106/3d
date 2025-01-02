@@ -1,0 +1,15 @@
+let
+  h = 22;
+  d1 = 10;
+  d2 = 8;
+
+  big = circle d1;
+  small = circle d2;
+
+  body = difference [
+    big,
+    small 
+  ] >> extrude h;
+
+in
+  body

@@ -1,0 +1,22 @@
+let
+  h = 5;
+  d1 = 10;
+  d2 = 8;
+
+  big = circle d1;
+  small = circle d2;
+
+  body = difference [
+    big,
+    small 
+  ] >> extrude h;
+
+  cutter = rect [d1+1, d1+1]
+        >> extrude (h+2)
+        >> move [(d1+1)/2, 0, 0];
+
+in
+  difference [
+    body,
+    cutter
+  ]// >> reflect Z_axis
